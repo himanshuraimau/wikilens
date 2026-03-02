@@ -1,6 +1,9 @@
-#include <iostream>
-#include <fstream>
+#define ASIO_STANDALONE
+#define CROW_MAIN
+#include "crow.h"
+
 #include <filesystem>
+#include <fstream>
 #include "tokenizer.h"
 #include "inverted_index.h"
 #include "query_engine.h"
@@ -18,12 +21,15 @@ std::string readFile(const std::string& path) {
 
 int main() {
 
+    // =========================
+    // Build Index At Startup
+    // =========================
+
     Tokenizer tokenizer("../data/stopwords.txt");
     InvertedIndex index;
     DocumentStore store;
 
     std::string corpus_path = "../data/corpus";
-
     uint32_t doc_id = 0;
 
     for (const auto& entry : fs::directory_iterator(corpus_path)) {
@@ -34,35 +40,58 @@ int main() {
         std::string filename = entry.path().filename().string();
 
         std::string content = readFile(path);
-
         auto tokens = tokenizer.tokenize(content);
 
         index.addDocument(doc_id, tokens);
         store.addDocument(doc_id, filename, path);
-
-        std::cout << "Indexed: " << filename << "\n";
 
         doc_id++;
     }
 
     QueryEngine engine(index, tokenizer);
 
-    std::string query;
-    std::cout << "\nEnter query: ";
-    std::getline(std::cin, query);
+    // =========================
+    // HTTP Server
+    // =========================
 
-    auto results = engine.search(query, 5);
+    crow::SimpleApp app;
 
-    std::cout << "\nResults:\n";
+    // Health check
+    CROW_ROUTE(app, "/")
+    ([](){
+        return "WikiLens Search Engine Running";
+    });
 
-    for (const auto& r : results) {
-        const Document* doc = store.getDocument(r.doc_id);
-        if (doc) {
-            std::cout << doc->title
-                      << " | Score: "
-                      << r.score << "\n";
+    // Search endpoint
+    CROW_ROUTE(app, "/search")
+    ([&](const crow::request& req){
+
+        auto query = req.url_params.get("q");
+        if (!query) {
+            return crow::response(400, "Missing query parameter");
         }
-    }
 
-    return 0;
+        auto results = engine.search(query, 5);
+
+        crow::json::wvalue response;
+        response["results"] = crow::json::wvalue::list();
+
+        for (size_t i = 0; i < results.size(); ++i) {
+
+            const Document* doc =
+                store.getDocument(results[i].doc_id);
+
+            if (!doc) continue;
+
+            crow::json::wvalue item;
+            item["title"] = doc->title;
+            item["score"] = results[i].score;
+
+            response["results"][i] = std::move(item);
+        }
+
+        return crow::response(response);
+    });
+
+    app.port(8080).multithreaded().run();
 }

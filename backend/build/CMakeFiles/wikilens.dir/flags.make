@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/nyx/Projects/wikilens/backend/include
+CXX_INCLUDES = -I/home/nyx/Projects/wikilens/backend/include -I/home/nyx/Projects/wikilens/backend/external/Crow/include
 
 CXX_FLAGS = -std=gnu++20 -Wall -Wextra -O2
 
