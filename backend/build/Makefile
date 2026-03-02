@@ -153,6 +153,30 @@ src/bm25.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/bm25.cpp.s
 .PHONY : src/bm25.cpp.s
 
+src/document_store.o: src/document_store.cpp.o
+.PHONY : src/document_store.o
+
+# target to build an object file
+src/document_store.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/document_store.cpp.o
+.PHONY : src/document_store.cpp.o
+
+src/document_store.i: src/document_store.cpp.i
+.PHONY : src/document_store.i
+
+# target to preprocess a source file
+src/document_store.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/document_store.cpp.i
+.PHONY : src/document_store.cpp.i
+
+src/document_store.s: src/document_store.cpp.s
+.PHONY : src/document_store.s
+
+# target to generate assembly for a file
+src/document_store.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/document_store.cpp.s
+.PHONY : src/document_store.cpp.s
+
 src/inverted_index.o: src/inverted_index.cpp.o
 .PHONY : src/inverted_index.o
 
@@ -285,6 +309,9 @@ help:
 	@echo "... src/bm25.o"
 	@echo "... src/bm25.i"
 	@echo "... src/bm25.s"
+	@echo "... src/document_store.o"
+	@echo "... src/document_store.i"
+	@echo "... src/document_store.s"
 	@echo "... src/inverted_index.o"
 	@echo "... src/inverted_index.i"
 	@echo "... src/inverted_index.s"

@@ -35,6 +35,7 @@ add_executable(wikilens
     src/inverted_index.cpp
     src/bm25.cpp
     src/query_engine.cpp
+    src/document_store.cpp
 )
 
 target_include_directories(wikilens PRIVATE include)

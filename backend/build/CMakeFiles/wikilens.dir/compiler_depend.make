@@ -375,6 +375,7 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: /home/nyx/Projects/wikilens/backend/src/
   /home/nyx/Projects/wikilens/backend/include/inverted_index.h \
   /home/nyx/Projects/wikilens/backend/include/porter_stemmer.h \
   /home/nyx/Projects/wikilens/backend/include/posting.h \
+  /home/nyx/Projects/wikilens/backend/include/query_engine.h \
   /home/nyx/Projects/wikilens/backend/include/tokenizer.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
@@ -465,7 +466,6 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: /home/nyx/Projects/wikilens/backend/src/
   /usr/include/c++/15.2.1/bits/cpp_type_traits.h \
   /usr/include/c++/15.2.1/bits/cxxabi_forced.h \
   /usr/include/c++/15.2.1/bits/cxxabi_init_exception.h \
-  /usr/include/c++/15.2.1/bits/deque.tcc \
   /usr/include/c++/15.2.1/bits/enable_special_members.h \
   /usr/include/c++/15.2.1/bits/erase_if.h \
   /usr/include/c++/15.2.1/bits/exception.h \
@@ -508,14 +508,11 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: /home/nyx/Projects/wikilens/backend/src/
   /usr/include/c++/15.2.1/bits/stl_algobase.h \
   /usr/include/c++/15.2.1/bits/stl_bvector.h \
   /usr/include/c++/15.2.1/bits/stl_construct.h \
-  /usr/include/c++/15.2.1/bits/stl_deque.h \
   /usr/include/c++/15.2.1/bits/stl_function.h \
-  /usr/include/c++/15.2.1/bits/stl_heap.h \
   /usr/include/c++/15.2.1/bits/stl_iterator.h \
   /usr/include/c++/15.2.1/bits/stl_iterator_base_funcs.h \
   /usr/include/c++/15.2.1/bits/stl_iterator_base_types.h \
   /usr/include/c++/15.2.1/bits/stl_pair.h \
-  /usr/include/c++/15.2.1/bits/stl_queue.h \
   /usr/include/c++/15.2.1/bits/stl_uninitialized.h \
   /usr/include/c++/15.2.1/bits/stl_vector.h \
   /usr/include/c++/15.2.1/bits/streambuf.tcc \
@@ -542,7 +539,6 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: /home/nyx/Projects/wikilens/backend/src/
   /usr/include/c++/15.2.1/cwctype \
   /usr/include/c++/15.2.1/debug/assertions.h \
   /usr/include/c++/15.2.1/debug/debug.h \
-  /usr/include/c++/15.2.1/deque \
   /usr/include/c++/15.2.1/exception \
   /usr/include/c++/15.2.1/ext/aligned_buffer.h \
   /usr/include/c++/15.2.1/ext/alloc_traits.h \
@@ -559,7 +555,6 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: /home/nyx/Projects/wikilens/backend/src/
   /usr/include/c++/15.2.1/numbers \
   /usr/include/c++/15.2.1/ostream \
   /usr/include/c++/15.2.1/pstl/pstl_config.h \
-  /usr/include/c++/15.2.1/queue \
   /usr/include/c++/15.2.1/stdexcept \
   /usr/include/c++/15.2.1/streambuf \
   /usr/include/c++/15.2.1/string \
@@ -1252,13 +1247,17 @@ CMakeFiles/wikilens.dir/src/inverted_index.cpp.o:
 
 /usr/include/c++/15.2.1/pstl/execution_defs.h:
 
+/usr/include/c++/15.2.1/deque:
+
+/usr/include/c++/15.2.1/bits/stl_deque.h:
+
 /usr/include/c++/15.2.1/bits/ranges_algo.h:
+
+/usr/include/c++/15.2.1/bits/deque.tcc:
 
 /usr/include/c++/15.2.1/bits/algorithmfwd.h:
 
 /usr/include/c++/15.2.1/algorithm:
-
-/home/nyx/Projects/wikilens/backend/include/query_engine.h:
 
 /usr/include/c++/15.2.1/bits/fstream.tcc:
 
@@ -1271,14 +1270,6 @@ CMakeFiles/wikilens.dir/src/inverted_index.cpp.o:
 /home/nyx/Projects/wikilens/backend/src/query_engine.cpp:
 
 /usr/include/linux/stddef.h:
-
-/usr/include/linux/sched/types.h:
-
-/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr.h:
-
-/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
-
-/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/error_constants.h:
 
 /usr/lib/libstdc++.so:
 
@@ -1326,6 +1317,10 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 
 /usr/include/c++/15.2.1/bits/ostream_insert.h:
 
+/usr/include/c++/15.2.1/queue:
+
+/usr/include/c++/15.2.1/bits/ptr_traits.h:
+
 /usr/include/c++/15.2.1/bits/memoryfwd.h:
 
 /usr/include/bits/types/wint_t.h:
@@ -1341,6 +1336,8 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/ctype_base.h:
 
 /usr/include/c++/15.2.1/bits/hash_bytes.h:
+
+/home/nyx/Projects/wikilens/backend/include/query_engine.h:
 
 /usr/include/c++/15.2.1/bits/functexcept.h:
 
@@ -1454,12 +1451,6 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 
 /usr/include/c++/15.2.1/type_traits:
 
-/usr/include/linux/posix_types.h:
-
-/usr/include/bits/types/FILE.h:
-
-/usr/include/c++/15.2.1/bits/utility.h:
-
 /usr/include/wctype.h:
 
 /usr/include/sched.h:
@@ -1484,6 +1475,16 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 
 /usr/include/asm-generic/errno-base.h:
 
+/usr/include/c++/15.2.1/bits/stl_heap.h:
+
+/usr/include/asm-generic/bitsperlong.h:
+
+/usr/include/c++/15.2.1/exception:
+
+/usr/include/c++/15.2.1/bits/ranges_util.h:
+
+/usr/include/asm-generic/types.h:
+
 /usr/include/c++/15.2.1/bits/stl_iterator_base_types.h:
 
 /home/nyx/Projects/wikilens/backend/src/inverted_index.cpp:
@@ -1497,16 +1498,6 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 /usr/include/c++/15.2.1/bits/ostream.h:
 
 /usr/include/bits/stdint-least.h:
-
-/usr/include/asm-generic/bitsperlong.h:
-
-/usr/include/c++/15.2.1/exception:
-
-/usr/include/c++/15.2.1/bits/ranges_util.h:
-
-/usr/include/asm-generic/types.h:
-
-/usr/include/c++/15.2.1/bits/stl_heap.h:
 
 /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/cpu_defines.h:
 
@@ -1543,10 +1534,6 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 /usr/include/bits/types/error_t.h:
 
 /usr/include/c++/15.2.1/bits/exception_ptr.h:
-
-/usr/include/c++/15.2.1/bits/ptr_traits.h:
-
-/usr/include/c++/15.2.1/queue:
 
 /usr/include/c++/15.2.1/bits/unordered_map.h:
 
@@ -1702,8 +1689,6 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 
 /usr/include/c++/15.2.1/tr1/legendre_function.tcc:
 
-/usr/include/c++/15.2.1/bits/deque.tcc:
-
 /usr/include/c++/15.2.1/tr1/modified_bessel_func.tcc:
 
 /usr/include/bits/types/timer_t.h:
@@ -1735,8 +1720,6 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 /usr/include/features-time64.h:
 
 /usr/include/linux/errno.h:
-
-/usr/include/c++/15.2.1/bits/stl_deque.h:
 
 /usr/include/c++/15.2.1/cmath:
 
@@ -1772,6 +1755,8 @@ CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o:
 
 /home/nyx/Projects/wikilens/backend/include/tokenizer.h:
 
+/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr.h:
+
 CMakeFiles/wikilens.dir/src/bm25.cpp.o:
 
 /usr/include/bits/time.h:
@@ -1806,6 +1791,8 @@ CMakeFiles/wikilens.dir/src/bm25.cpp.o:
 
 /usr/include/c++/15.2.1/bits/ostream.tcc:
 
+/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/error_constants.h:
+
 /usr/include/c++/15.2.1/bits/streambuf_iterator.h:
 
 /usr/include/c++/15.2.1/bits/unordered_set.h:
@@ -1816,14 +1803,22 @@ CMakeFiles/wikilens.dir/src/bm25.cpp.o:
 
 /usr/include/c++/15.2.1/istream:
 
-/usr/include/c++/15.2.1/deque:
+/usr/include/c++/15.2.1/bits/stl_queue.h:
 
 /usr/include/bits/mathcalls.h:
-
-/usr/include/c++/15.2.1/bits/stl_queue.h:
 
 /usr/include/c++/15.2.1/iostream:
 
 /usr/include/c++/15.2.1/unordered_set:
 
 /usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/ctype_inline.h:
+
+/usr/include/c++/15.2.1/x86_64-pc-linux-gnu/bits/gthr-default.h:
+
+/usr/include/bits/types/FILE.h:
+
+/usr/include/c++/15.2.1/bits/utility.h:
+
+/usr/include/linux/posix_types.h:
+
+/usr/include/linux/sched/types.h:

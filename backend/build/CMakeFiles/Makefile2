@@ -85,12 +85,12 @@ clean: CMakeFiles/wikilens.dir/clean
 CMakeFiles/wikilens.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target wikilens"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Built target wikilens"
 .PHONY : CMakeFiles/wikilens.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/wikilens.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nyx/Projects/wikilens/backend/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nyx/Projects/wikilens/backend/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/wikilens.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/nyx/Projects/wikilens/backend/build/CMakeFiles 0
 .PHONY : CMakeFiles/wikilens.dir/rule
@@ -102,7 +102,7 @@ wikilens: CMakeFiles/wikilens.dir/rule
 # codegen rule for target.
 CMakeFiles/wikilens.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Finished codegen for target wikilens"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8 "Finished codegen for target wikilens"
 .PHONY : CMakeFiles/wikilens.dir/codegen
 
 # clean rule for target.

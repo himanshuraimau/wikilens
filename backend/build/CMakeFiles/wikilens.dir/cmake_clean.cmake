@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/wikilens.dir/link.d"
   "CMakeFiles/wikilens.dir/src/bm25.cpp.o"
   "CMakeFiles/wikilens.dir/src/bm25.cpp.o.d"
+  "CMakeFiles/wikilens.dir/src/document_store.cpp.o"
+  "CMakeFiles/wikilens.dir/src/document_store.cpp.o.d"
   "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o"
   "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o.d"
   "CMakeFiles/wikilens.dir/src/main.cpp.o"

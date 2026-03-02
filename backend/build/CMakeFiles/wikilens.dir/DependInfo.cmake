@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nyx/Projects/wikilens/backend/src/bm25.cpp" "CMakeFiles/wikilens.dir/src/bm25.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/bm25.cpp.o.d"
+  "/home/nyx/Projects/wikilens/backend/src/document_store.cpp" "CMakeFiles/wikilens.dir/src/document_store.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/document_store.cpp.o.d"
   "/home/nyx/Projects/wikilens/backend/src/inverted_index.cpp" "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o.d"
   "/home/nyx/Projects/wikilens/backend/src/main.cpp" "CMakeFiles/wikilens.dir/src/main.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/main.cpp.o.d"
   "/home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp" "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o.d"
