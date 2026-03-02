@@ -172,4 +172,6 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: \
  /usr/include/c++/15.2.1/cstdint \
  /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
- /usr/include/bits/stdint-least.h
+ /usr/include/bits/stdint-least.h \
+ /home/nyx/Projects/wikilens/backend/include/query_engine.h \
+ /home/nyx/Projects/wikilens/backend/include/bm25.h

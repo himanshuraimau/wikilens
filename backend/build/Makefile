@@ -129,6 +129,30 @@ wikilens/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/build
 .PHONY : wikilens/fast
 
+src/bm25.o: src/bm25.cpp.o
+.PHONY : src/bm25.o
+
+# target to build an object file
+src/bm25.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/bm25.cpp.o
+.PHONY : src/bm25.cpp.o
+
+src/bm25.i: src/bm25.cpp.i
+.PHONY : src/bm25.i
+
+# target to preprocess a source file
+src/bm25.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/bm25.cpp.i
+.PHONY : src/bm25.cpp.i
+
+src/bm25.s: src/bm25.cpp.s
+.PHONY : src/bm25.s
+
+# target to generate assembly for a file
+src/bm25.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/bm25.cpp.s
+.PHONY : src/bm25.cpp.s
+
 src/inverted_index.o: src/inverted_index.cpp.o
 .PHONY : src/inverted_index.o
 
@@ -201,6 +225,30 @@ src/porter_stemmer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.s
 .PHONY : src/porter_stemmer.cpp.s
 
+src/query_engine.o: src/query_engine.cpp.o
+.PHONY : src/query_engine.o
+
+# target to build an object file
+src/query_engine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/query_engine.cpp.o
+.PHONY : src/query_engine.cpp.o
+
+src/query_engine.i: src/query_engine.cpp.i
+.PHONY : src/query_engine.i
+
+# target to preprocess a source file
+src/query_engine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/query_engine.cpp.i
+.PHONY : src/query_engine.cpp.i
+
+src/query_engine.s: src/query_engine.cpp.s
+.PHONY : src/query_engine.s
+
+# target to generate assembly for a file
+src/query_engine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/query_engine.cpp.s
+.PHONY : src/query_engine.cpp.s
+
 src/tokenizer.o: src/tokenizer.cpp.o
 .PHONY : src/tokenizer.o
 
@@ -234,6 +282,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... wikilens"
+	@echo "... src/bm25.o"
+	@echo "... src/bm25.i"
+	@echo "... src/bm25.s"
 	@echo "... src/inverted_index.o"
 	@echo "... src/inverted_index.i"
 	@echo "... src/inverted_index.s"
@@ -243,6 +294,9 @@ help:
 	@echo "... src/porter_stemmer.o"
 	@echo "... src/porter_stemmer.i"
 	@echo "... src/porter_stemmer.s"
+	@echo "... src/query_engine.o"
+	@echo "... src/query_engine.i"
+	@echo "... src/query_engine.s"
 	@echo "... src/tokenizer.o"
 	@echo "... src/tokenizer.i"
 	@echo "... src/tokenizer.s"

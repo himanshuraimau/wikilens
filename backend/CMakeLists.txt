@@ -33,6 +33,8 @@ add_executable(wikilens
     src/tokenizer.cpp
     src/porter_stemmer.cpp
     src/inverted_index.cpp
+    src/bm25.cpp
+    src/query_engine.cpp
 )
 
 target_include_directories(wikilens PRIVATE include)

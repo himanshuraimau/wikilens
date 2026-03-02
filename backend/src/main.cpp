@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tokenizer.h"
 #include "inverted_index.h"
+#include "query_engine.h"
 
 int main() {
     Tokenizer tokenizer("../data/stopwords.txt");
@@ -9,7 +10,7 @@ int main() {
     std::vector<std::string> docs = {
         "Computer science studies algorithms and data structures",
         "Algorithms are fundamental to computer science",
-        "Data science and Algorithms involves statistics and machine learning"
+        "Data science involves statistics and machine learning"
     };
 
     for (uint32_t i = 0; i < docs.size(); ++i) {
@@ -17,20 +18,15 @@ int main() {
         index.addDocument(i, tokens);
     }
 
-    auto plist = index.lookup("algorithm");
+    QueryEngine engine(index, tokenizer);
 
-    if (plist) {
-        std::cout << "Doc Frequency: "
-                  << plist->doc_freq << "\n";
+    auto results = engine.search("computer algorithms", 5);
 
-        for (const auto& posting : plist->postings) {
-            std::cout << "DocID: "
-                      << posting.doc_id
-                      << " TF: "
-                      << posting.term_freq << "\n";
-        }
-    } else {
-        std::cout << "Term not found\n";
+    for (const auto& r : results) {
+        std::cout << "Doc "
+                  << r.doc_id
+                  << " Score: "
+                  << r.score << "\n";
     }
 
     return 0;
