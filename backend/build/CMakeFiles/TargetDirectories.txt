@@ -1,0 +1,3 @@
+/home/nyx/Projects/wikilens/backend/build/CMakeFiles/wikilens.dir
+/home/nyx/Projects/wikilens/backend/build/CMakeFiles/edit_cache.dir
+/home/nyx/Projects/wikilens/backend/build/CMakeFiles/rebuild_cache.dir

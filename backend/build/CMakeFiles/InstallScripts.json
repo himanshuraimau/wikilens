@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/nyx/Projects/wikilens/backend/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
