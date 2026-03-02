@@ -129,6 +129,30 @@ wikilens/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/build
 .PHONY : wikilens/fast
 
+src/inverted_index.o: src/inverted_index.cpp.o
+.PHONY : src/inverted_index.o
+
+# target to build an object file
+src/inverted_index.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/inverted_index.cpp.o
+.PHONY : src/inverted_index.cpp.o
+
+src/inverted_index.i: src/inverted_index.cpp.i
+.PHONY : src/inverted_index.i
+
+# target to preprocess a source file
+src/inverted_index.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/inverted_index.cpp.i
+.PHONY : src/inverted_index.cpp.i
+
+src/inverted_index.s: src/inverted_index.cpp.s
+.PHONY : src/inverted_index.s
+
+# target to generate assembly for a file
+src/inverted_index.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/inverted_index.cpp.s
+.PHONY : src/inverted_index.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -153,6 +177,54 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/porter_stemmer.o: src/porter_stemmer.cpp.o
+.PHONY : src/porter_stemmer.o
+
+# target to build an object file
+src/porter_stemmer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o
+.PHONY : src/porter_stemmer.cpp.o
+
+src/porter_stemmer.i: src/porter_stemmer.cpp.i
+.PHONY : src/porter_stemmer.i
+
+# target to preprocess a source file
+src/porter_stemmer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.i
+.PHONY : src/porter_stemmer.cpp.i
+
+src/porter_stemmer.s: src/porter_stemmer.cpp.s
+.PHONY : src/porter_stemmer.s
+
+# target to generate assembly for a file
+src/porter_stemmer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.s
+.PHONY : src/porter_stemmer.cpp.s
+
+src/tokenizer.o: src/tokenizer.cpp.o
+.PHONY : src/tokenizer.o
+
+# target to build an object file
+src/tokenizer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/tokenizer.cpp.o
+.PHONY : src/tokenizer.cpp.o
+
+src/tokenizer.i: src/tokenizer.cpp.i
+.PHONY : src/tokenizer.i
+
+# target to preprocess a source file
+src/tokenizer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/tokenizer.cpp.i
+.PHONY : src/tokenizer.cpp.i
+
+src/tokenizer.s: src/tokenizer.cpp.s
+.PHONY : src/tokenizer.s
+
+# target to generate assembly for a file
+src/tokenizer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/tokenizer.cpp.s
+.PHONY : src/tokenizer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -162,9 +234,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... wikilens"
+	@echo "... src/inverted_index.o"
+	@echo "... src/inverted_index.i"
+	@echo "... src/inverted_index.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/porter_stemmer.o"
+	@echo "... src/porter_stemmer.i"
+	@echo "... src/porter_stemmer.s"
+	@echo "... src/tokenizer.o"
+	@echo "... src/tokenizer.i"
+	@echo "... src/tokenizer.s"
 .PHONY : help
 
 

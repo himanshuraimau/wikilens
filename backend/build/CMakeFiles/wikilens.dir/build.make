@@ -86,18 +86,66 @@ CMakeFiles/wikilens.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wikilens.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nyx/Projects/wikilens/backend/src/main.cpp -o CMakeFiles/wikilens.dir/src/main.cpp.s
 
+CMakeFiles/wikilens.dir/src/tokenizer.cpp.o: CMakeFiles/wikilens.dir/flags.make
+CMakeFiles/wikilens.dir/src/tokenizer.cpp.o: /home/nyx/Projects/wikilens/backend/src/tokenizer.cpp
+CMakeFiles/wikilens.dir/src/tokenizer.cpp.o: CMakeFiles/wikilens.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/wikilens.dir/src/tokenizer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wikilens.dir/src/tokenizer.cpp.o -MF CMakeFiles/wikilens.dir/src/tokenizer.cpp.o.d -o CMakeFiles/wikilens.dir/src/tokenizer.cpp.o -c /home/nyx/Projects/wikilens/backend/src/tokenizer.cpp
+
+CMakeFiles/wikilens.dir/src/tokenizer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wikilens.dir/src/tokenizer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nyx/Projects/wikilens/backend/src/tokenizer.cpp > CMakeFiles/wikilens.dir/src/tokenizer.cpp.i
+
+CMakeFiles/wikilens.dir/src/tokenizer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wikilens.dir/src/tokenizer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nyx/Projects/wikilens/backend/src/tokenizer.cpp -o CMakeFiles/wikilens.dir/src/tokenizer.cpp.s
+
+CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o: CMakeFiles/wikilens.dir/flags.make
+CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o: /home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp
+CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o: CMakeFiles/wikilens.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o -MF CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o.d -o CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o -c /home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp
+
+CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp > CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.i
+
+CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp -o CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.s
+
+CMakeFiles/wikilens.dir/src/inverted_index.cpp.o: CMakeFiles/wikilens.dir/flags.make
+CMakeFiles/wikilens.dir/src/inverted_index.cpp.o: /home/nyx/Projects/wikilens/backend/src/inverted_index.cpp
+CMakeFiles/wikilens.dir/src/inverted_index.cpp.o: CMakeFiles/wikilens.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/wikilens.dir/src/inverted_index.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/wikilens.dir/src/inverted_index.cpp.o -MF CMakeFiles/wikilens.dir/src/inverted_index.cpp.o.d -o CMakeFiles/wikilens.dir/src/inverted_index.cpp.o -c /home/nyx/Projects/wikilens/backend/src/inverted_index.cpp
+
+CMakeFiles/wikilens.dir/src/inverted_index.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/wikilens.dir/src/inverted_index.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nyx/Projects/wikilens/backend/src/inverted_index.cpp > CMakeFiles/wikilens.dir/src/inverted_index.cpp.i
+
+CMakeFiles/wikilens.dir/src/inverted_index.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/wikilens.dir/src/inverted_index.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nyx/Projects/wikilens/backend/src/inverted_index.cpp -o CMakeFiles/wikilens.dir/src/inverted_index.cpp.s
+
 # Object files for target wikilens
 wikilens_OBJECTS = \
-"CMakeFiles/wikilens.dir/src/main.cpp.o"
+"CMakeFiles/wikilens.dir/src/main.cpp.o" \
+"CMakeFiles/wikilens.dir/src/tokenizer.cpp.o" \
+"CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o" \
+"CMakeFiles/wikilens.dir/src/inverted_index.cpp.o"
 
 # External object files for target wikilens
 wikilens_EXTERNAL_OBJECTS =
 
 wikilens: CMakeFiles/wikilens.dir/src/main.cpp.o
+wikilens: CMakeFiles/wikilens.dir/src/tokenizer.cpp.o
+wikilens: CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o
+wikilens: CMakeFiles/wikilens.dir/src/inverted_index.cpp.o
 wikilens: CMakeFiles/wikilens.dir/build.make
 wikilens: CMakeFiles/wikilens.dir/compiler_depend.ts
 wikilens: CMakeFiles/wikilens.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable wikilens"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nyx/Projects/wikilens/backend/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable wikilens"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/wikilens.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

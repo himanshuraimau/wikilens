@@ -1,7 +1,13 @@
 file(REMOVE_RECURSE
   "CMakeFiles/wikilens.dir/link.d"
+  "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o"
+  "CMakeFiles/wikilens.dir/src/inverted_index.cpp.o.d"
   "CMakeFiles/wikilens.dir/src/main.cpp.o"
   "CMakeFiles/wikilens.dir/src/main.cpp.o.d"
+  "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o"
+  "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o.d"
+  "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o"
+  "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o.d"
   "wikilens"
   "wikilens.pdb"
 )

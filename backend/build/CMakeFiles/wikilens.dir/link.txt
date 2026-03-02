@@ -1,1 +1,1 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/wikilens.dir/link.d CMakeFiles/wikilens.dir/src/main.cpp.o -o wikilens
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/wikilens.dir/link.d CMakeFiles/wikilens.dir/src/main.cpp.o CMakeFiles/wikilens.dir/src/tokenizer.cpp.o CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o CMakeFiles/wikilens.dir/src/inverted_index.cpp.o -o wikilens

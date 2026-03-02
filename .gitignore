@@ -100,3 +100,9 @@ logs/
 *.temp
 *.bak
 *.cache
+
+# Data files (uncomment if you have large datasets)
+# backend/data/*.txt
+# backend/data/*.json
+# backend/data/*.xml
+# backend/data/sample_docs/

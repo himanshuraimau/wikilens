@@ -30,6 +30,9 @@ add_compile_options(-Wall -Wextra -O2)
 
 add_executable(wikilens
     src/main.cpp
+    src/tokenizer.cpp
+    src/porter_stemmer.cpp
+    src/inverted_index.cpp
 )
 
 target_include_directories(wikilens PRIVATE include)
