@@ -64,11 +64,16 @@ int main() {
 
     // Search endpoint
     CROW_ROUTE(app, "/search")
+    .methods("GET"_method)
     ([&](const crow::request& req){
+        crow::response res;
+        res.add_header("Access-Control-Allow-Origin", "*");
 
         auto query = req.url_params.get("q");
         if (!query) {
-            return crow::response(400, "Missing query parameter");
+            res.code = 400;
+            res.body = "Missing query parameter";
+            return res;
         }
 
         auto results = engine.search(query, 5);
@@ -90,7 +95,9 @@ int main() {
             response["results"][i] = std::move(item);
         }
 
-        return crow::response(response);
+        res.body = response.dump();
+        res.add_header("Content-Type", "application/json");
+        return res;
     });
 
     app.port(8080).multithreaded().run();
