@@ -16,6 +16,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o.d"
   "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o"
   "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o.d"
+  "CMakeFiles/wikilens.dir/src/wikitext_stripper.cpp.o"
+  "CMakeFiles/wikilens.dir/src/wikitext_stripper.cpp.o.d"
   "wikilens"
   "wikilens.pdb"
 )

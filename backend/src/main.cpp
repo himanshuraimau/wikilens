@@ -11,6 +11,7 @@
 #include "query_engine.h"
 #include "document_store.h"
 #include "wiki_parser.h"
+#include "wikitext_stripper.h"
 
 namespace fs = std::filesystem;
 
@@ -31,6 +32,7 @@ int main() {
     Tokenizer tokenizer("../data/stopwords.txt");
     InvertedIndex index;
     DocumentStore store;
+    WikitextStripper stripper;
 
     // Parse Wikipedia XML dump
     WikiParser parser;
@@ -40,10 +42,11 @@ int main() {
         [&](const std::string& title,
             const std::string& text) {
 
-            auto tokens = tokenizer.tokenize(text);
+            std::string cleaned = stripper.clean(text);
+            auto tokens = tokenizer.tokenize(cleaned);
 
             index.addDocument(doc_id, tokens);
-            store.addDocument(doc_id, title, "");
+            store.addDocument(doc_id, title, cleaned);
 
             doc_id++;
 

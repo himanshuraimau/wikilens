@@ -17,6 +17,7 @@ add_executable(wikilens
     src/query_engine.cpp
     src/document_store.cpp
     src/wiki_parser.cpp
+    src/wikitext_stripper.cpp
 )
 
 find_package(Threads REQUIRED)

@@ -321,6 +321,30 @@ src/wiki_parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wiki_parser.cpp.s
 .PHONY : src/wiki_parser.cpp.s
 
+src/wikitext_stripper.o: src/wikitext_stripper.cpp.o
+.PHONY : src/wikitext_stripper.o
+
+# target to build an object file
+src/wikitext_stripper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wikitext_stripper.cpp.o
+.PHONY : src/wikitext_stripper.cpp.o
+
+src/wikitext_stripper.i: src/wikitext_stripper.cpp.i
+.PHONY : src/wikitext_stripper.i
+
+# target to preprocess a source file
+src/wikitext_stripper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wikitext_stripper.cpp.i
+.PHONY : src/wikitext_stripper.cpp.i
+
+src/wikitext_stripper.s: src/wikitext_stripper.cpp.s
+.PHONY : src/wikitext_stripper.s
+
+# target to generate assembly for a file
+src/wikitext_stripper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wikitext_stripper.cpp.s
+.PHONY : src/wikitext_stripper.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -354,6 +378,9 @@ help:
 	@echo "... src/wiki_parser.o"
 	@echo "... src/wiki_parser.i"
 	@echo "... src/wiki_parser.s"
+	@echo "... src/wikitext_stripper.o"
+	@echo "... src/wikitext_stripper.i"
+	@echo "... src/wikitext_stripper.s"
 .PHONY : help
 
 
