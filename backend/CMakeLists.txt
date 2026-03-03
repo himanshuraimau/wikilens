@@ -10,14 +10,14 @@ include_directories(external/Crow/include)
 
 add_executable(wikilens
     src/main.cpp
-    src/tokenizer.cpp
-    src/porter_stemmer.cpp
-    src/inverted_index.cpp
-    src/bm25.cpp
-    src/query_engine.cpp
-    src/document_store.cpp
-    src/wiki_parser.cpp
-    src/wikitext_stripper.cpp
+    src/indexer/tokenizer.cpp
+    src/indexer/porter_stemmer.cpp
+    src/indexer/inverted_index.cpp
+    src/indexer/wiki_parser.cpp
+    src/indexer/wikitext_stripper.cpp
+    src/ranking/bm25.cpp
+    src/query/query_engine.cpp
+    src/storage/document_store.cpp
 )
 
 find_package(Threads REQUIRED)

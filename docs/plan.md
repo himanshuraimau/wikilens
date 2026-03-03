@@ -1,4 +1,4 @@
-# 🔍 Building a Search Engine from Scratch in C++
+## 🔍 Building a Search Engine from Scratch in C++
 ### Dataset: Wikipedia Dump
 
 ---
@@ -333,484 +333,484 @@ Min-heap of size K — O(N log K)
 - [ ] BM25 scorer integrated with query engine
 - [ ] PageRank computation on link graph (offline)
 - [ ] Combine BM25 + PageRank into final score
-- [ ] Top-K results with snippet extraction
-- [ ] Simple CLI or HTTP API for querying
-
-### Phase 6 — Scale & Polish (Week 9–10)
-- [ ] Index partitioning (by term range or document range)
-- [ ] Caching frequent queries (LRU cache)
-- [ ] Query latency benchmarking
-- [ ] Stress test with large corpus
-- [ ] Write design doc
-
----
-
-## 6. C++ Code Skeletons
-
-### 5.1 Core Data Structures
-
-```cpp
-// posting.h
-#pragma once
-#include <cstdint>
-#include <vector>
-
-struct Posting {
-    uint32_t doc_id;
-    uint16_t term_freq;
-    std::vector<uint32_t> positions; // for phrase queries
-};
-
-struct PostingList {
-    uint32_t doc_freq;              // number of docs containing this term
-    std::vector<Posting> postings;  // sorted by doc_id
-};
-```
-
-### 5.2 Tokenizer
-
-```cpp
-// tokenizer.h
-#pragma once
-#include <string>
-#include <vector>
-#include <sstream>
-#include <algorithm>
-#include <cctype>
-
-class Tokenizer {
-public:
-    std::vector<std::string> tokenize(const std::string& text) {
-        std::vector<std::string> tokens;
-        std::string token;
-
-        for (char c : text) {
-            if (std::isalnum(c)) {
-                token += std::tolower(c);
-            } else if (!token.empty()) {
-                if (!isStopWord(token)) {
-                    tokens.push_back(stem(token));
-                }
-                token.clear();
-            }
-        }
-        if (!token.empty() && !isStopWord(token)) {
-            tokens.push_back(stem(token));
-        }
-        return tokens;
-    }
-
-private:
-    bool isStopWord(const std::string& word);
-    std::string stem(const std::string& word); // Porter Stemmer
-};
-```
-
-### 5.3 Inverted Index
-
-```cpp
-// inverted_index.h
-#pragma once
-#include <string>
-#include <unordered_map>
-#include <vector>
-#include "posting.h"
-
-class InvertedIndex {
-public:
-    void addDocument(uint32_t doc_id, const std::vector<std::string>& tokens) {
-        for (uint32_t pos = 0; pos < tokens.size(); ++pos) {
-            const std::string& term = tokens[pos];
-            auto& plist = index_[term];
-            
-            // find or create posting for this doc
-            if (plist.postings.empty() || plist.postings.back().doc_id != doc_id) {
-                plist.postings.push_back({doc_id, 1, {pos}});
-                plist.doc_freq++;
-            } else {
-                plist.postings.back().term_freq++;
-                plist.postings.back().positions.push_back(pos);
-            }
-        }
-        total_docs_++;
-        doc_lengths_[doc_id] = tokens.size();
-    }
-
-    const PostingList* lookup(const std::string& term) const {
-        auto it = index_.find(term);
-        return (it != index_.end()) ? &it->second : nullptr;
-    }
-
-    uint32_t totalDocs() const { return total_docs_; }
-    uint32_t docLength(uint32_t doc_id) const {
-        auto it = doc_lengths_.find(doc_id);
-        return it != doc_lengths_.end() ? it->second : 0;
-    }
-    double avgDocLength() const;
-
-    void saveToDisk(const std::string& path) const;
-    void loadFromDisk(const std::string& path);
-
-private:
-    std::unordered_map<std::string, PostingList> index_;
-    std::unordered_map<uint32_t, uint32_t> doc_lengths_;
-    uint32_t total_docs_ = 0;
-};
-```
-
-### 5.4 BM25 Scorer
-
-```cpp
-// bm25.h
-#pragma once
-#include <cmath>
-#include <string>
-#include <vector>
-#include <unordered_map>
-#include "inverted_index.h"
-
-class BM25Scorer {
-    static constexpr double k1 = 1.5;
-    static constexpr double b  = 0.75;
-
-public:
-    BM25Scorer(const InvertedIndex& index) : index_(index) {}
-
-    std::unordered_map<uint32_t, double> score(
-        const std::vector<std::string>& query_terms
-    ) {
-        std::unordered_map<uint32_t, double> scores;
-        double avgDL = index_.avgDocLength();
-        uint32_t N   = index_.totalDocs();
-
-        for (const auto& term : query_terms) {
-            const PostingList* plist = index_.lookup(term);
-            if (!plist) continue;
-
-            double df  = plist->doc_freq;
-            double idf = std::log((N - df + 0.5) / (df + 0.5) + 1.0);
-
-            for (const auto& posting : plist->postings) {
-                double tf = posting.term_freq;
-                double dl = index_.docLength(posting.doc_id);
-                double norm = 1.0 - b + b * (dl / avgDL);
-                double tf_norm = (tf * (k1 + 1.0)) / (tf + k1 * norm);
-                scores[posting.doc_id] += idf * tf_norm;
-            }
-        }
-        return scores;
-    }
-
-private:
-    const InvertedIndex& index_;
-};
-```
-
-### 5.5 Query Engine
-
-```cpp
-// query_engine.h
-#pragma once
-#include <string>
-#include <vector>
-#include <queue>
-#include <utility>
-#include "inverted_index.h"
-#include "bm25.h"
-#include "tokenizer.h"
-
-struct SearchResult {
-    uint32_t doc_id;
-    double score;
-    bool operator<(const SearchResult& other) const {
-        return score < other.score; // max-heap
-    }
-};
-
-class QueryEngine {
-public:
-    QueryEngine(InvertedIndex& index)
-        : index_(index), scorer_(index), tokenizer_() {}
-
-    // Returns top-K results sorted by score descending
-    std::vector<SearchResult> search(const std::string& query, int top_k = 10) {
-        auto terms = tokenizer_.tokenize(query);
-        auto scores = scorer_.score(terms);
-
-        std::priority_queue<SearchResult> pq;
-        for (auto& [doc_id, score] : scores) {
-            pq.push({doc_id, score});
-        }
-
-        std::vector<SearchResult> results;
-        while (!pq.empty() && (int)results.size() < top_k) {
-            results.push_back(pq.top());
-            pq.pop();
-        }
-        return results;
-    }
-
-private:
-    InvertedIndex& index_;
-    BM25Scorer scorer_;
-    Tokenizer tokenizer_;
-};
-```
-
-### 5.6 Simple Thread Pool for Crawler
-
-```cpp
-// thread_pool.h
-#pragma once
-#include <vector>
-#include <queue>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <functional>
-#include <atomic>
-
-class ThreadPool {
-public:
-    ThreadPool(size_t num_threads) : stop_(false) {
-        for (size_t i = 0; i < num_threads; ++i) {
-            workers_.emplace_back([this] {
-                while (true) {
-                    std::function<void()> task;
-                    {
-                        std::unique_lock<std::mutex> lock(queue_mutex_);
-                        cv_.wait(lock, [this] {
-                            return stop_ || !tasks_.empty();
-                        });
-                        if (stop_ && tasks_.empty()) return;
-                        task = std::move(tasks_.front());
-                        tasks_.pop();
-                    }
-                    task();
-                }
-            });
-        }
-    }
-
-    template<typename F>
-    void enqueue(F&& f) {
-        {
-            std::unique_lock<std::mutex> lock(queue_mutex_);
-            tasks_.emplace(std::forward<F>(f));
-        }
-        cv_.notify_one();
-    }
-
-    ~ThreadPool() {
-        { std::unique_lock<std::mutex> lock(queue_mutex_); stop_ = true; }
-        cv_.notify_all();
-        for (auto& t : workers_) t.join();
-    }
-
-private:
-    std::vector<std::thread> workers_;
-    std::queue<std::function<void()>> tasks_;
-    std::mutex queue_mutex_;
-    std::condition_variable cv_;
-    bool stop_;
-};
-```
-
----
-
-## 7. Scalability & Distributed Design
-
-This is where Amazon interviews go deep. Be ready to discuss all of this.
-
-### Index Partitioning Strategies
-
-**Option A — Term Partitioning (by term)**
-```
-Node 1: terms A–F
-Node 2: terms G–M
-Node 3: terms N–Z
-```
-- Pro: Simple routing, each node handles full posting list for its terms
-- Con: Hot spots for common terms, complex for multi-term queries
-
-**Option B — Document Partitioning (by document range)**
-```
-Node 1: docs 0–1M
-Node 2: docs 1M–2M
-Node 3: docs 2M–3M
-```
-- Pro: Queries broadcast to all nodes, results merged — naturally parallelizes
-- Con: More network traffic per query
-- ✅ This is how most real search engines work (Elasticsearch shards)
-
-### Replication
-- Each shard has N replicas (typically 3) for fault tolerance
-- Leader-follower replication for index writes
-- Any replica can serve reads (load balancing)
-
-### Caching
-```
-L1: In-process LRU cache for hot query results (~1K queries)
-L2: Redis/Memcached for distributed query cache
-L3: Inverted index hot terms cached in memory (skip disk I/O)
-```
-
-### Query Routing Architecture
-```
-Client → Load Balancer → Query Router
-                              ↓ (scatter)
-              ┌───────────────┼───────────────┐
-           Shard 1         Shard 2         Shard 3
-              └───────────────┼───────────────┘
-                              ↓ (gather & merge)
-                         Query Router
-                              ↓
-                          Client
-```
-
-### Handling Scale Numbers (have these ready)
-| Metric | Number | Implication |
-|--------|--------|------------|
-| Web pages indexed | ~50 billion | Need distributed index |
-| Index size (compressed) | ~100 TB | Cannot fit on one machine |
-| Queries per second | ~100,000 | Need massive parallelism |
-| Latency target | <100ms | Cache everything hot |
-| Crawler throughput | Billions/day | Need distributed crawling |
-
----
-
-## 8. Amazon Interview Tips
-
-### Leadership Principles to Weave In
-- **Customer Obsession** — "I'd prioritize result relevance because end-users care about finding the right answer, not just fast answers."
-- **Dive Deep** — Be ready to go from system architecture down to the BM25 formula.
-- **Invent and Simplify** — "For the first version, I'd skip JavaScript rendering and focus on correctness of static HTML."
-- **Bias for Action** — "I'd start with a small corpus locally, validate the ranking quality, then scale."
-
-### Common Interview Questions for This Design
-1. How would you handle index updates when a page changes? *(Delta indexing, re-crawl scheduling)*
-2. How do you deal with near-duplicate pages? *(SimHash / MinHash)*
-3. How would you scale the crawler to 1B pages/day? *(Distributed URL frontier, Kafka)*
-4. How do you handle malicious or spam pages? *(Link analysis, spam signals)*
-5. What happens if one index shard goes down? *(Replicas, graceful degradation)*
-6. How do you keep the index fresh? *(Tiered indexing: hot/warm/cold)*
-7. How would you implement autocomplete? *(Trie + prefix lookup + frequency ranking)*
-8. What's your approach to ranking personalization? *(User context signals — mention privacy tradeoffs)*
-
-### Things to Always Say in the Interview
-- Clarify the scope first: "Are we building for the web, or an internal document search?"
-- Start with the simplest design, then evolve: "Let me start with a single machine design first..."
-- Mention tradeoffs explicitly: "The tradeoff here is consistency vs. availability — I'd prefer availability for search."
-- Quantify your assumptions: "Assuming 10B documents at ~1KB each, that's 10TB of raw text..."
-
----
-
-## 9. Project File Structure
-
-```
-search-engine/
-├── CMakeLists.txt
-├── README.md
-├── data/
-│   ├── stopwords.txt
-│   └── corpus/             # sample documents for testing
-├── include/
-│   ├── crawler/
-│   │   ├── crawler.h
-│   │   ├── html_parser.h
-│   │   └── url_frontier.h
-│   ├── indexer/
-│   │   ├── indexer.h
-│   │   ├── inverted_index.h
-│   │   ├── posting.h
-│   │   └── tokenizer.h
-│   ├── query/
-│   │   ├── query_engine.h
-│   │   └── query_parser.h
-│   ├── ranking/
-│   │   ├── bm25.h
-│   │   └── pagerank.h
-│   ├── storage/
-│   │   └── document_store.h
-│   └── utils/
-│       ├── thread_pool.h
-│       ├── lru_cache.h
-│       └── bloom_filter.h
-├── src/
-│   ├── crawler/
-│   ├── indexer/
-│   ├── query/
-│   ├── ranking/
-│   ├── storage/
-│   └── main.cpp
-└── tests/
-    ├── test_tokenizer.cpp
-    ├── test_indexer.cpp
-    ├── test_bm25.cpp
-    └── test_query_engine.cpp
-```
-
----
-
-## 10. Libraries & Tools
-
-| Library | Purpose | Install |
-|---------|---------|---------|
-| `libexpat` | SAX XML streaming parser for Wikipedia dump | `apt install libexpat1-dev` |
-| `libbz2` | Decompress `.bz2` dump on the fly | `apt install libbz2-dev` |
-| `libcurl` | HTTP requests (useful if extending to crawl later) | `apt install libcurl4-openssl-dev` |
-| `gumbo-parser` | HTML parsing (Google's) | `apt install libgumbo-dev` |
-| `GoogleTest` | Unit testing | CMake FetchContent |
-| `spdlog` | Fast logging | CMake FetchContent |
-| `nlohmann/json` | Config files / API responses | Header-only |
-| `xxHash` | Ultra-fast hashing for dedup | Header-only |
-
-### CMakeLists.txt starter
-```cmake
-cmake_minimum_required(VERSION 3.20)
-project(SearchEngine CXX)
-
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Compiler flags
-add_compile_options(-Wall -Wextra -O2)
-
-find_package(CURL REQUIRED)
-find_package(Threads REQUIRED)
-
-include_directories(include)
-
-add_executable(search_engine
-    src/main.cpp
-    src/indexer/tokenizer.cpp
-    src/indexer/inverted_index.cpp
-    src/ranking/bm25.cpp
-    src/query/query_engine.cpp
-    src/crawler/crawler.cpp
-)
-
-target_link_libraries(search_engine
-    CURL::libcurl
-    Threads::Threads
-)
-```
-
----
-
-## Quick Reference Cheat Sheet
-
-```
-Inverted Index lookup:  O(1) hash map
-Posting list merge:     O(n + m) two-pointer
-Top-K ranking:          O(N log K) min-heap
-BM25 scoring:           O(|query| × avg_posting_length)
-PageRank:               O(iterations × edges)
-URL dedup (Bloom):      O(1) insert/lookup, probabilistic
-
-Space:
-  Raw index:            ~20% of corpus size (with compression)
-  Posting list entry:   ~12 bytes (docID + tf + offset)
-  Doc store entry:      ~500 bytes average
-```
++- [ ] Top-K results with snippet extraction
++- [ ] Simple CLI or HTTP API for querying
++
++### Phase 6 — Scale & Polish (Week 9–10)
++- [ ] Index partitioning (by term range or document range)
++- [ ] Caching frequent queries (LRU cache)
++- [ ] Query latency benchmarking
++- [ ] Stress test with large corpus
++- [ ] Write design doc
++
++---
++
++## 6. C++ Code Skeletons
++
++### 5.1 Core Data Structures
++
++```cpp
++// posting.h
++#pragma once
++#include <cstdint>
++#include <vector>
++
++struct Posting {
++    uint32_t doc_id;
++    uint16_t term_freq;
++    std::vector<uint32_t> positions; // for phrase queries
++};
++
++struct PostingList {
++    uint32_t doc_freq;              // number of docs containing this term
++    std::vector<Posting> postings;  // sorted by doc_id
++};
++```
++
++### 5.2 Tokenizer
++
++```cpp
++// tokenizer.h
++#pragma once
++#include <string>
++#include <vector>
++#include <sstream>
++#include <algorithm>
++#include <cctype>
++
++class Tokenizer {
++public:
++    std::vector<std::string> tokenize(const std::string& text) {
++        std::vector<std::string> tokens;
++        std::string token;
++
++        for (char c : text) {
++            if (std::isalnum(c)) {
++                token += std::tolower(c);
++            } else if (!token.empty()) {
++                if (!isStopWord(token)) {
++                    tokens.push_back(stem(token));
++                }
++                token.clear();
++            }
++        }
++        if (!token.empty() && !isStopWord(token)) {
++            tokens.push_back(stem(token));
++        }
++        return tokens;
++    }
++
++private:
++    bool isStopWord(const std::string& word);
++    std::string stem(const std::string& word); // Porter Stemmer
++};
++```
++
++### 5.3 Inverted Index
++
++```cpp
++// inverted_index.h
++#pragma once
++#include <string>
++#include <unordered_map>
++#include <vector>
++#include "posting.h"
++
++class InvertedIndex {
++public:
++    void addDocument(uint32_t doc_id, const std::vector<std::string>& tokens) {
++        for (uint32_t pos = 0; pos < tokens.size(); ++pos) {
++            const std::string& term = tokens[pos];
++            auto& plist = index_[term];
++
++            // find or create posting for this doc
++            if (plist.postings.empty() || plist.postings.back().doc_id != doc_id) {
++                plist.postings.push_back({doc_id, 1, {pos}});
++                plist.doc_freq++;
++            } else {
++                plist.postings.back().term_freq++;
++                plist.postings.back().positions.push_back(pos);
++            }
++        }
++        total_docs_++;
++        doc_lengths_[doc_id] = tokens.size();
++    }
++
++    const PostingList* lookup(const std::string& term) const {
++        auto it = index_.find(term);
++        return (it != index_.end()) ? &it->second : nullptr;
++    }
++
++    uint32_t totalDocs() const { return total_docs_; }
++    uint32_t docLength(uint32_t doc_id) const {
++        auto it = doc_lengths_.find(doc_id);
++        return it != doc_lengths_.end() ? it->second : 0;
++    }
++    double avgDocLength() const;
++
++    void saveToDisk(const std::string& path) const;
++    void loadFromDisk(const std::string& path);
++
++private:
++    std::unordered_map<std::string, PostingList> index_;
++    std::unordered_map<uint32_t, uint32_t> doc_lengths_;
++    uint32_t total_docs_ = 0;
++};
++```
++
++### 5.4 BM25 Scorer
++
++```cpp
++// bm25.h
++#pragma once
++#include <cmath>
++#include <string>
++#include <vector>
++#include <unordered_map>
++#include "inverted_index.h"
++
++class BM25Scorer {
++    static constexpr double k1 = 1.5;
++    static constexpr double b  = 0.75;
++
++public:
++    BM25Scorer(const InvertedIndex& index) : index_(index) {}
++
++    std::unordered_map<uint32_t, double> score(
++        const std::vector<std::string>& query_terms
++    ) {
++        std::unordered_map<uint32_t, double> scores;
++        double avgDL = index_.avgDocLength();
++        uint32_t N   = index_.totalDocs();
++
++        for (const auto& term : query_terms) {
++            const PostingList* plist = index_.lookup(term);
++            if (!plist) continue;
++
++            double df  = plist->doc_freq;
++            double idf = std::log((N - df + 0.5) / (df + 0.5) + 1.0);
++
++            for (const auto& posting : plist->postings) {
++                double tf = posting.term_freq;
++                double dl = index_.docLength(posting.doc_id);
++                double norm = 1.0 - b + b * (dl / avgDL);
++                double tf_norm = (tf * (k1 + 1.0)) / (tf + k1 * norm);
++                scores[posting.doc_id] += idf * tf_norm;
++            }
++        }
++        return scores;
++    }
++
++private:
++    const InvertedIndex& index_;
++};
++```
++
++### 5.5 Query Engine
++
++```cpp
++// query_engine.h
++#pragma once
++#include <string>
++#include <vector>
++#include <queue>
++#include <utility>
++#include "inverted_index.h"
++#include "bm25.h"
++#include "tokenizer.h"
++
++struct SearchResult {
++    uint32_t doc_id;
++    double score;
++    bool operator<(const SearchResult& other) const {
++        return score < other.score; // max-heap
++    }
++};
++
++class QueryEngine {
++public:
++    QueryEngine(InvertedIndex& index)
++        : index_(index), scorer_(index), tokenizer_() {}
++
++    // Returns top-K results sorted by score descending
++    std::vector<SearchResult> search(const std::string& query, int top_k = 10) {
++        auto terms = tokenizer_.tokenize(query);
++        auto scores = scorer_.score(terms);
++
++        std::priority_queue<SearchResult> pq;
++        for (auto& [doc_id, score] : scores) {
++            pq.push({doc_id, score});
++        }
++
++        std::vector<SearchResult> results;
++        while (!pq.empty() && (int)results.size() < top_k) {
++            results.push_back(pq.top());
++            pq.pop();
++        }
++        return results;
++    }
++
++private:
++    InvertedIndex& index_;
++    BM25Scorer scorer_;
++    Tokenizer tokenizer_;
++};
++```
++
++### 5.6 Simple Thread Pool for Crawler
++
++```cpp
++// thread_pool.h
++#pragma once
++#include <vector>
++#include <queue>
++#include <thread>
++#include <mutex>
++#include <condition_variable>
++#include <functional>
++#include <atomic>
++
++class ThreadPool {
++public:
++    ThreadPool(size_t num_threads) : stop_(false) {
++        for (size_t i = 0; i < num_threads; ++i) {
++            workers_.emplace_back([this] {
++                while (true) {
++                    std::function<void()> task;
++                    {
++                        std::unique_lock<std::mutex> lock(queue_mutex_);
++                        cv_.wait(lock, [this] {
++                            return stop_ || !tasks_.empty();
++                        });
++                        if (stop_ && tasks_.empty()) return;
++                        task = std::move(tasks_.front());
++                        tasks_.pop();
++                    }
++                    task();
++                }
++            });
++        }
++    }
++
++    template<typename F>
++    void enqueue(F&& f) {
++        {
++            std::unique_lock<std::mutex> lock(queue_mutex_);
++            tasks_.emplace(std::forward<F>(f));
++        }
++        cv_.notify_one();
++    }
++
++    ~ThreadPool() {
++        { std::unique_lock<std::mutex> lock(queue_mutex_); stop_ = true; }
++        cv_.notify_all();
++        for (auto& t : workers_) t.join();
++    }
++
++private:
++    std::vector<std::thread> workers_;
++    std::queue<std::function<void()>> tasks_;
++    std::mutex queue_mutex_;
++    std::condition_variable cv_;
++    bool stop_;
++};
++```
++
++---
++
++## 7. Scalability & Distributed Design
++
++This is where Amazon interviews go deep. Be ready to discuss all of this.
++
++### Index Partitioning Strategies
++
++**Option A — Term Partitioning (by term)**
++```
++Node 1: terms A–F
++Node 2: terms G–M
++Node 3: terms N–Z
++```
++- Pro: Simple routing, each node handles full posting list for its terms
++- Con: Hot spots for common terms, complex for multi-term queries
++
++**Option B — Document Partitioning (by document range)**
++```
++Node 1: docs 0–1M
++Node 2: docs 1M–2M
++Node 3: docs 2M–3M
++```
++- Pro: Queries broadcast to all nodes, results merged — naturally parallelizes
++- Con: More network traffic per query
++- ✅ This is how most real search engines work (Elasticsearch shards)
++
++### Replication
++- Each shard has N replicas (typically 3) for fault tolerance
++- Leader-follower replication for index writes
++- Any replica can serve reads (load balancing)
++
++### Caching
++```
++L1: In-process LRU cache for hot query results (~1K queries)
++L2: Redis/Memcached for distributed query cache
++L3: Inverted index hot terms cached in memory (skip disk I/O)
++```
++
++### Query Routing Architecture
++```
++Client → Load Balancer → Query Router
++                              ↓ (scatter)
++              ┌───────────────┼───────────────┐
++           Shard 1         Shard 2         Shard 3
++              └───────────────┼───────────────┘
++                              ↓ (gather & merge)
++                         Query Router
++                              ↓
++                          Client
++```
++
++### Handling Scale Numbers (have these ready)
++| Metric | Number | Implication |
++|--------|--------|------------|
++| Web pages indexed | ~50 billion | Need distributed index |
++| Index size (compressed) | ~100 TB | Cannot fit on one machine |
++| Queries per second | ~100,000 | Need massive parallelism |
++| Latency target | <100ms | Cache everything hot |
++| Crawler throughput | Billions/day | Need distributed crawling |
++
++---
++
++## 8. Amazon Interview Tips
++
++### Leadership Principles to Weave In
++- **Customer Obsession** — "I'd prioritize result relevance because end-users care about finding the right answer, not just fast answers."
++- **Dive Deep** — Be ready to go from system architecture down to the BM25 formula.
++- **Invent and Simplify** — "For the first version, I'd skip JavaScript rendering and focus on correctness of static HTML."
++- **Bias for Action** — "I'd start with a small corpus locally, validate the ranking quality, then scale."
++
++### Common Interview Questions for This Design
++1. How would you handle index updates when a page changes? *(Delta indexing, re-crawl scheduling)*
++2. How do you deal with near-duplicate pages? *(SimHash / MinHash)*
++3. How would you scale the crawler to 1B pages/day? *(Distributed URL frontier, Kafka)*
++4. How do you handle malicious or spam pages? *(Link analysis, spam signals)*
++5. What happens if one index shard goes down? *(Replicas, graceful degradation)*
++6. How do you keep the index fresh? *(Tiered indexing: hot/warm/cold)*
++7. How would you implement autocomplete? *(Trie + prefix lookup + frequency ranking)*
++8. What's your approach to ranking personalization? *(User context signals — mention privacy tradeoffs)*
++
++### Things to Always Say in the Interview
++- Clarify the scope first: "Are we building for the web, or an internal document search?"
++- Start with the simplest design, then evolve: "Let me start with a single machine design first..."
++- Mention tradeoffs explicitly: "The tradeoff here is consistency vs. availability — I'd prefer availability for search."
++- Quantify your assumptions: "Assuming 10B documents at ~1KB each, that's 10TB of raw text..."
++
++---
++
++## 9. Project File Structure
++
++```
++search-engine/
++├── CMakeLists.txt
++├── README.md
++├── data/
++│   ├── stopwords.txt
++│   └── corpus/             # sample documents for testing
++├── include/
++│   ├── crawler/
++│   │   ├── crawler.h
++│   │   ├── html_parser.h
++│   │   └── url_frontier.h
++│   ├── indexer/
++│   │   ├── indexer.h
++│   │   ├── inverted_index.h
++│   │   ├── posting.h
++│   │   └── tokenizer.h
++│   ├── query/
++│   │   ├── query_engine.h
++│   │   └── query_parser.h
++│   ├── ranking/
++│   │   ├── bm25.h
++│   │   └── pagerank.h
++│   ├── storage/
++│   │   └── document_store.h
++│   └── utils/
++│       ├── thread_pool.h
++│       ├── lru_cache.h
++│       └── bloom_filter.h
++├── src/
++│   ├── crawler/
++│   ├── indexer/
++│   ├── query/
++│   ├── ranking/
++│   ├── storage/
++│   └── main.cpp
++└── tests/
++    ├── test_tokenizer.cpp
++    ├── test_indexer.cpp
++    ├── test_bm25.cpp
++    └── test_query_engine.cpp
++```
++
++---
++
++## 10. Libraries & Tools
++
++| Library | Purpose | Install |
++|---------|---------|---------|
++| `libexpat` | SAX XML streaming parser for Wikipedia dump | `apt install libexpat1-dev` |
++| `libbz2` | Decompress `.bz2` dump on the fly | `apt install libbz2-dev` |
++| `libcurl` | HTTP requests (useful if extending to crawl later) | `apt install libcurl4-openssl-dev` |
++| `gumbo-parser` | HTML parsing (Google's) | `apt install libgumbo-dev` |
++| `GoogleTest` | Unit testing | CMake FetchContent |
++| `spdlog` | Fast logging | CMake FetchContent |
++| `nlohmann/json` | Config files / API responses | Header-only |
++| `xxHash` | Ultra-fast hashing for dedup | Header-only |
++
++### CMakeLists.txt starter
++```cmake
++cmake_minimum_required(VERSION 3.20)
++project(SearchEngine CXX)
++
++set(CMAKE_CXX_STANDARD 20)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++
++# Compiler flags
++add_compile_options(-Wall -Wextra -O2)
++
++find_package(CURL REQUIRED)
++find_package(Threads REQUIRED)
++
++include_directories(include)
++
++add_executable(search_engine
++    src/main.cpp
++    src/indexer/tokenizer.cpp
++    src/indexer/inverted_index.cpp
++    src/ranking/bm25.cpp
++    src/query/query_engine.cpp
++    src/crawler/crawler.cpp
++)
++
++target_link_libraries(search_engine
++    CURL::libcurl
++    Threads::Threads
++)
++```
++
++---
++
++## Quick Reference Cheat Sheet
++
++```
++Inverted Index lookup:  O(1) hash map
++Posting list merge:     O(n + m) two-pointer
++Top-K ranking:          O(N log K) min-heap
++BM25 scoring:           O(|query| × avg_posting_length)
++PageRank:               O(iterations × edges)
++URL dedup (Bloom):      O(1) insert/lookup, probabilistic
++
++Space:
++  Raw index:            ~20% of corpus size (with compression)
++  Posting list entry:   ~12 bytes (docID + tf + offset)
++  Doc store entry:      ~500 bytes average
++```
 
