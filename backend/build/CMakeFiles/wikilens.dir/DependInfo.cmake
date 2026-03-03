@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nyx/Projects/wikilens/backend/src/porter_stemmer.cpp" "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/porter_stemmer.cpp.o.d"
   "/home/nyx/Projects/wikilens/backend/src/query_engine.cpp" "CMakeFiles/wikilens.dir/src/query_engine.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/query_engine.cpp.o.d"
   "/home/nyx/Projects/wikilens/backend/src/tokenizer.cpp" "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o.d"
+  "/home/nyx/Projects/wikilens/backend/src/wiki_parser.cpp" "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o" "gcc" "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o.d"
   "" "wikilens" "gcc" "CMakeFiles/wikilens.dir/link.d"
   )
 

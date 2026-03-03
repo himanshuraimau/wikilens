@@ -14,6 +14,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/wikilens.dir/src/query_engine.cpp.o.d"
   "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o"
   "CMakeFiles/wikilens.dir/src/tokenizer.cpp.o.d"
+  "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o"
+  "CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o.d"
   "wikilens"
   "wikilens.pdb"
 )

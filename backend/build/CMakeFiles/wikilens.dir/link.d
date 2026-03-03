@@ -9,7 +9,9 @@ wikilens: \
   CMakeFiles/wikilens.dir/src/bm25.cpp.o \
   CMakeFiles/wikilens.dir/src/query_engine.cpp.o \
   CMakeFiles/wikilens.dir/src/document_store.cpp.o \
+  CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libpthread.a \
+  /usr/lib/libexpat.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
@@ -58,7 +60,11 @@ CMakeFiles/wikilens.dir/src/query_engine.cpp.o:
 
 CMakeFiles/wikilens.dir/src/document_store.cpp.o:
 
+CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o:
+
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libpthread.a:
+
+/usr/lib/libexpat.so:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so:
 

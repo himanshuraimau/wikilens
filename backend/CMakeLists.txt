@@ -16,8 +16,13 @@ add_executable(wikilens
     src/bm25.cpp
     src/query_engine.cpp
     src/document_store.cpp
+    src/wiki_parser.cpp
 )
 
 find_package(Threads REQUIRED)
+find_package(EXPAT REQUIRED)
 
-target_link_libraries(wikilens pthread)
+target_link_libraries(wikilens
+    pthread
+    EXPAT::EXPAT
+)

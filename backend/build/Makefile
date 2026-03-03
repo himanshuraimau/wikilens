@@ -297,6 +297,30 @@ src/tokenizer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/tokenizer.cpp.s
 .PHONY : src/tokenizer.cpp.s
 
+src/wiki_parser.o: src/wiki_parser.cpp.o
+.PHONY : src/wiki_parser.o
+
+# target to build an object file
+src/wiki_parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wiki_parser.cpp.o
+.PHONY : src/wiki_parser.cpp.o
+
+src/wiki_parser.i: src/wiki_parser.cpp.i
+.PHONY : src/wiki_parser.i
+
+# target to preprocess a source file
+src/wiki_parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wiki_parser.cpp.i
+.PHONY : src/wiki_parser.cpp.i
+
+src/wiki_parser.s: src/wiki_parser.cpp.s
+.PHONY : src/wiki_parser.s
+
+# target to generate assembly for a file
+src/wiki_parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/wikilens.dir/build.make CMakeFiles/wikilens.dir/src/wiki_parser.cpp.s
+.PHONY : src/wiki_parser.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -327,6 +351,9 @@ help:
 	@echo "... src/tokenizer.o"
 	@echo "... src/tokenizer.i"
 	@echo "... src/tokenizer.s"
+	@echo "... src/wiki_parser.o"
+	@echo "... src/wiki_parser.i"
+	@echo "... src/wiki_parser.s"
 .PHONY : help
 
 

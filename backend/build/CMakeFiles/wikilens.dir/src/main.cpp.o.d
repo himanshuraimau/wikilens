@@ -841,4 +841,5 @@ CMakeFiles/wikilens.dir/src/main.cpp.o: \
  /home/nyx/Projects/wikilens/backend/include/posting.h \
  /home/nyx/Projects/wikilens/backend/include/query_engine.h \
  /home/nyx/Projects/wikilens/backend/include/bm25.h \
- /home/nyx/Projects/wikilens/backend/include/document_store.h
+ /home/nyx/Projects/wikilens/backend/include/document_store.h \
+ /home/nyx/Projects/wikilens/backend/include/wiki_parser.h

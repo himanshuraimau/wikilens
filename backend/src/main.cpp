@@ -2,12 +2,15 @@
 #define CROW_MAIN
 #include "crow.h"
 
+#include <cstdint>
+#include <iostream>
 #include <filesystem>
 #include <fstream>
 #include "tokenizer.h"
 #include "inverted_index.h"
 #include "query_engine.h"
 #include "document_store.h"
+#include "wiki_parser.h"
 
 namespace fs = std::filesystem;
 
@@ -29,24 +32,30 @@ int main() {
     InvertedIndex index;
     DocumentStore store;
 
-    std::string corpus_path = "../data/corpus";
+    // Parse Wikipedia XML dump
+    WikiParser parser;
     uint32_t doc_id = 0;
 
-    for (const auto& entry : fs::directory_iterator(corpus_path)) {
+    parser.parse("../simplewiki-latest-pages-articles.xml.1",
+        [&](const std::string& title,
+            const std::string& text) {
 
-        if (!entry.is_regular_file()) continue;
+            auto tokens = tokenizer.tokenize(text);
 
-        std::string path = entry.path().string();
-        std::string filename = entry.path().filename().string();
+            index.addDocument(doc_id, tokens);
+            store.addDocument(doc_id, title, "");
 
-        std::string content = readFile(path);
-        auto tokens = tokenizer.tokenize(content);
+            doc_id++;
 
-        index.addDocument(doc_id, tokens);
-        store.addDocument(doc_id, filename, path);
+            if (doc_id % 1000 == 0) {
+                std::cout << "Indexed "
+                          << doc_id
+                          << " pages\n";
+            }
+        }
+    );
 
-        doc_id++;
-    }
+    std::cout << "Finished indexing " << doc_id << " pages\n";
 
     QueryEngine engine(index, tokenizer);
 
