@@ -1,9 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import "./index.css"
 
 type Result = {
   title: string;
   score: number;
+};
+
+// Custom Styles for Glassmorphism
+const glassStyle = {
+  background: "rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(12px)",
+  WebkitBackdropFilter: "blur(12px)",
+  border: "1px solid rgba(255, 255, 255, 0.2)",
+  boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.15)",
 };
 
 function App() {
@@ -14,7 +25,6 @@ function App() {
 
   const search = async () => {
     if (!query.trim()) return;
-
     setLoading(true);
     setSearched(true);
 
@@ -22,179 +32,139 @@ function App() {
       const res = await axios.get(
         `http://localhost:8080/search?q=${encodeURIComponent(query)}`
       );
-      setResults(res.data.results);
+      setResults(res.data.results || []);
     } catch (err) {
-      console.error(err);
-    }
-
-    setLoading(false);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      search();
+      console.error("Search failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      padding: "20px",
-      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif"
+      background: "linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%)",
+      color: "#f8fafc",
+      padding: "40px 20px",
+      fontFamily: "'Inter', system-ui, sans-serif"
     }}>
-      <div style={{
-        width: "1400px",
-        margin: "0 auto",
-        paddingTop: "60px"
-      }}>
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <h1 style={{
-            fontSize: "3.5rem",
-            color: "white",
-            marginBottom: "10px",
-            fontWeight: "700",
-            letterSpacing: "-0.5px"
-          }}>
-            WikiLens 🔍
-          </h1>
-          <p style={{
-            color: "rgba(255, 255, 255, 0.9)",
-            fontSize: "1.1rem",
-            margin: 0
-          }}>
-            Intelligent document search powered by BM25
+      <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+        
+        {/* Header Section */}
+        <header style={{ textAlign: "center", marginBottom: "60px" }}>
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              fontSize: "4rem",
+              fontWeight: "800",
+              background: "linear-gradient(to right, #818cf8, #c084fc)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              margin: "0 0 10px 0",
+              letterSpacing: "-0.05em"
+            }}
+          >
+            WikiLens
+          </motion.h1>
+          <p style={{ color: "#94a3b8", fontSize: "1.1rem" }}>
+            Precision search across documents via <span style={{ color: "#818cf8" }}>BM25 Ranking</span>
           </p>
-        </div>
+        </header>
 
-        {/* Search Box */}
+        {/* Search Bar Container */}
         <div style={{
-          background: "white",
-          borderRadius: "12px",
-          padding: "8px",
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
-          marginBottom: "40px",
+          ...glassStyle,
+          borderRadius: "24px",
+          padding: "10px",
           display: "flex",
-          gap: "8px"
+          gap: "10px",
+          marginBottom: "50px",
+          transition: "transform 0.2s ease"
         }}>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Search documents..."
+            onKeyDown={(e) => e.key === "Enter" && search()}
+            placeholder="Search for anything..."
             style={{
               flex: 1,
-              padding: "14px 20px",
+              background: "transparent",
               border: "none",
               outline: "none",
-              fontSize: "16px",
-              borderRadius: "8px",
-              fontFamily: "inherit"
+              color: "white",
+              padding: "15px 25px",
+              fontSize: "1.1rem",
             }}
           />
           <button
             onClick={search}
             disabled={loading || !query.trim()}
             style={{
-              padding: "14px 32px",
-              background: loading ? "#9ca3af" : "#667eea",
+              background: "#6366f1",
               color: "white",
               border: "none",
-              borderRadius: "8px",
-              fontSize: "16px",
+              borderRadius: "16px",
+              padding: "0 30px",
               fontWeight: "600",
-              cursor: loading || !query.trim() ? "not-allowed" : "pointer",
-              transition: "all 0.2s",
-              whiteSpace: "nowrap"
-            }}
-            onMouseEnter={(e) => {
-              if (!loading && query.trim()) {
-                e.currentTarget.style.background = "#5568d3";
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!loading) {
-                e.currentTarget.style.background = "#667eea";
-              }
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 15px rgba(99, 102, 241, 0.4)"
             }}
           >
-            {loading ? "Searching..." : "Search"}
+            {loading ? "..." : "Search"}
           </button>
         </div>
 
-        {/* Results */}
-        {searched && !loading && results.length === 0 && (
-          <div style={{
-            background: "rgba(255, 255, 255, 0.95)",
-            borderRadius: "12px",
-            padding: "40px",
-            textAlign: "center",
-            color: "#6b7280"
-          }}>
-            <p style={{ fontSize: "1.1rem", margin: 0 }}>
-              No results found for "{query}"
-            </p>
-          </div>
-        )}
-
-        {results.length > 0 && (
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px"
-          }}>
-            {results.map((r, i) => (
-              <div
-                key={i}
+        {/* Results Area */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <AnimatePresence>
+            {results.map((result, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                whileHover={{ scale: 1.02, backgroundColor: "rgba(255, 255, 255, 0.15)" }}
                 style={{
-                  background: "rgba(255, 255, 255, 0.95)",
-                  borderRadius: "12px",
-                  padding: "24px",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  transition: "all 0.2s",
-                  cursor: "pointer"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 8px 12px rgba(0, 0, 0, 0.15)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+                  ...glassStyle,
+                  borderRadius: "18px",
+                  padding: "25px",
+                  cursor: "pointer",
                 }}
               >
-                <div style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "start",
-                  gap: "16px",
-                  flexWrap: "wrap"
-                }}>
-                  <h3 style={{
-                    margin: 0,
-                    fontSize: "1.25rem",
-                    color: "#1f2937",
-                    fontWeight: "600",
-                    flex: 1
-                  }}>
-                    {r.title}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h3 style={{ margin: 0, fontSize: "1.25rem", color: "#e2e8f0" }}>
+                    {result.title}
                   </h3>
                   <div style={{
-                    background: "#f3f4f6",
-                    padding: "6px 12px",
-                    borderRadius: "6px",
-                    fontSize: "0.875rem",
-                    color: "#6b7280",
-                    fontWeight: "500"
+                    fontSize: "0.8rem",
+                    fontWeight: "bold",
+                    color: "#818cf8",
+                    background: "rgba(129, 140, 248, 0.1)",
+                    padding: "4px 12px",
+                    borderRadius: "20px",
+                    border: "1px solid rgba(129, 140, 248, 0.3)"
                   }}>
-                    Score: {r.score.toFixed(4)}
+                    SCORE: {result.score.toFixed(3)}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
-        )}
+          </AnimatePresence>
+
+          {/* Empty State */}
+          {searched && !loading && results.length === 0 && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ textAlign: "center", padding: "40px", color: "#64748b" }}
+            >
+              <div style={{ fontSize: "3rem", marginBottom: "10px" }}>🔭</div>
+              <p>No documents found matching "<strong>{query}</strong>"</p>
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );

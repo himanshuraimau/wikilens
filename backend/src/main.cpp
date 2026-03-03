@@ -85,7 +85,7 @@ int main() {
             return res;
         }
 
-        auto results = engine.search(query, 5);
+        auto results = engine.search(query, 20);
 
         crow::json::wvalue response;
         response["results"] = crow::json::wvalue::list();
